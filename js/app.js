@@ -34,9 +34,19 @@ var sReq = new XMLHttpRequest();
 sReq.addEventListener('load', function() {
   let films = JSON.parse(this.responseText).results;
   console.log(films);
+  for (var i = 0; i < films.length; i++) {
+    var listItem = document.createElement("li");
+    listItem.innerHTML = films[i].title;
+    e.appendChild(listItem);
+  }
 });
 sReq.open("GET", 'http://swapi.co/api/films/');
 sReq.send();
+
+
+
+
+
 
 
 
