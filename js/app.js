@@ -34,10 +34,37 @@ var sReq = new XMLHttpRequest();
 sReq.addEventListener('load', function() {
   let films = JSON.parse(this.responseText).results;
   console.log(films);
+
   for (var i = 0; i < films.length; i++) {
-    var listItem = document.createElement("li");
-    listItem.innerHTML = films[i].title;
-    e.appendChild(listItem);
+
+    var mainListItem = document.createElement("li");
+    mainListItem.setAttribute('class', "film");
+
+    var filmTitle = document.createElement("h2");
+    filmTitle.setAttribute('class', "filmTitle");
+    filmTitle.innerHTML = films[i].title;
+
+    //there is a random h3 tag here that says "Planets"
+    var planetsTag = document.createElement("h3");
+    planetsTag.innerHTML = "Planets";
+
+    var planetuList = document.createElement("ul");
+    planetuList.setAttribute('class', "filmPlanets");
+    var planetList = document.createElement("li");
+    planetList.setAttribute('class', "planet");
+
+    var planetItem = document.createElement("h4");
+    planetItem.setAttribute('class', "planetName");
+
+    //appending
+    mainListItem.appendChild(filmTitle);
+    mainListItem.appendChild(planetsTag);
+    mainListItem.appendChild(planetuList);
+
+    planetuList.appendChild(planetList);
+    planetList.appendChild(planetItem);
+
+    e.appendChild(mainListItem);
   }
 });
 sReq.open("GET", 'http://swapi.co/api/films/');
