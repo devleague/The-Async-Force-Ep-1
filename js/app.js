@@ -6,9 +6,6 @@ var c = document.getElementById("person14Name");
 var d = document.getElementById("person14Species");
 var e = document.getElementById("filmList");
 
-
-
-
 function getUrl(request, url) {
   var reqListener = function() {
 
@@ -19,10 +16,6 @@ function getUrl(request, url) {
   request.open("GET", url, true);
   request.send();
 }
-
-
-
-
 
 function requestProcess(request, url, elem) { 
   var reqListener = function() {
@@ -56,26 +49,34 @@ sReq.addEventListener('load', function() {
   e.appendChild(mainUlist);
 
   for (var i = 0; i < films.length; i++) {
-    console.log(films[i].planets);
     let currentFilm = films[i];
+
     var filmItem = document.createElement("li");
     filmItem.setAttribute('class', "filmTitle");
     filmItem.innerHTML = "Title: " + films[i].title;
     filmItem.style.listStyleType = 'none'; 
 
-      for (let j = 0; j < currentFilm.planets.length; j++) {
-        let planetItem = document.createElement("h3");
-        planetItem.setAttribute('id', "planetTitle");
+    currentFilm.planets.forEach(function(planetURL) {
+        let plReq = new XMLHttpRequest();
+        //we will need one request per planetURL..need to retrieve 'name'
 
-        let planetReq = new XMLHttpRequest();
-        let x = document.getElementById("planetTitle");
-        requestProcess(planetReq, currentFilm.planets[j], x);
+        
+        let planetItem = document.createElement("li");
+        planetItem.setAttribute('class', "planetItem");
+        planetItem.innerHTML = function(request, url) {
+          return url;
+        }(planetURL);
+
 
         filmItem.appendChild(planetItem);
-      }
+
+
+      });//end forEach
 
     mainUlist.appendChild(filmItem);
-  }
+
+
+  }//end for loop
 
 
 
