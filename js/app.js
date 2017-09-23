@@ -3,7 +3,7 @@ console.log('sanity check');
 var a = document.getElementById("person4Name");
 var b = document.getElementById("person4HomeWorld");
 var c = document.getElementById("person14Name");
-var d = document.getElementById("person14HomeWorld");
+var d = document.getElementById("person14Species");
 var e = document.getElementById("filmList");
 
 function requestProcess(request, url, elem) { 
@@ -26,6 +26,11 @@ requestProcess(pReq, 'http://swapi.co/api/planets/1/', b);
 
 var qReq = new XMLHttpRequest();
 requestProcess(qReq, 'http://swapi.co/api/people/14/', c);
+console.log(qReq);
+
+var rReq = new XMLHttpRequest();
+requestProcess(rReq, 'http://swapi.co/api/species/1/', d);
+
 
 
 
