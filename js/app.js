@@ -31,8 +31,17 @@ var rReq = new XMLHttpRequest();
 requestProcess(rReq, 'http://swapi.co/api/species/1/', d);
 
 var sReq = new XMLHttpRequest();
-requestProcess(sReq, 'http://swapi.co/api/films/');
-console.log(sReq);
+sReq.addEventListener('load', function() {
+  let films = JSON.parse(this.responseText).results;
+  console.log(films);
+});
+sReq.open("GET", 'http://swapi.co/api/films/');
+sReq.send();
+
+
+
+
+
 
 
 
