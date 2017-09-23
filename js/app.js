@@ -6,6 +6,24 @@ var c = document.getElementById("person14Name");
 var d = document.getElementById("person14Species");
 var e = document.getElementById("filmList");
 
+
+
+
+function getUrl(request, url) {
+  var reqListener = function() {
+
+    let newUrl = JSON.parse(this.responseText).name;
+    return newUrl;
+  }
+  request.addEventListener('load', reqListener);
+  request.open("GET", url, true);
+  request.send();
+}
+
+
+
+
+
 function requestProcess(request, url, elem) { 
   var reqListener = function() {
     let newHTML = JSON.parse(this.responseText); //the parse is important.
@@ -32,40 +50,35 @@ requestProcess(rReq, 'http://swapi.co/api/species/1/', d);
 
 var sReq = new XMLHttpRequest();
 sReq.addEventListener('load', function() {
-  let films = JSON.parse(this.responseText).results;
-  console.log(films);
+  var films = JSON.parse(this.responseText).results;
+  mainUlist = document.createElement("ul");
+  mainUlist.setAttribute('class', "filmList");
+  e.appendChild(mainUlist);
 
   for (var i = 0; i < films.length; i++) {
+    console.log(films[i].planets);
+    let currentFilm = films[i];
+    var filmItem = document.createElement("li");
+    filmItem.setAttribute('class', "filmTitle");
+    filmItem.innerHTML = "Title: " + films[i].title;
+    filmItem.style.listStyleType = 'none'; 
 
-    var mainListItem = document.createElement("li");
-    mainListItem.setAttribute('class', "film");
+      for (let j = 0; j < currentFilm.planets.length; j++) {
+        let planetItem = document.createElement("h3");
+        planetItem.setAttribute('id', "planetTitle");
 
-    var filmTitle = document.createElement("h2");
-    filmTitle.setAttribute('class', "filmTitle");
-    filmTitle.innerHTML = films[i].title;
+        let planetReq = new XMLHttpRequest();
+        let x = document.getElementById("planetTitle");
+        requestProcess(planetReq, currentFilm.planets[j], x);
 
-    //there is a random h3 tag here that says "Planets"
-    var planetsTag = document.createElement("h3");
-    planetsTag.innerHTML = "Planets";
+        filmItem.appendChild(planetItem);
+      }
 
-    var planetuList = document.createElement("ul");
-    planetuList.setAttribute('class', "filmPlanets");
-    var planetList = document.createElement("li");
-    planetList.setAttribute('class', "planet");
-
-    var planetItem = document.createElement("h4");
-    planetItem.setAttribute('class', "planetName");
-
-    //appending
-    mainListItem.appendChild(filmTitle);
-    mainListItem.appendChild(planetsTag);
-    mainListItem.appendChild(planetuList);
-
-    planetuList.appendChild(planetList);
-    planetList.appendChild(planetItem);
-
-    e.appendChild(mainListItem);
+    mainUlist.appendChild(filmItem);
   }
+
+
+
 });
 sReq.open("GET", 'http://swapi.co/api/films/');
 sReq.send();
