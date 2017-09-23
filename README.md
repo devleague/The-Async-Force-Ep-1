@@ -1,8 +1,6 @@
 # The-Async-Force-Ep-1
 An **async** Exercise using **client side** XHR accessing the swapi API at https://swapi.co
 
-
-
 ## Excercise
 *Remember to commit after each step.*
 
