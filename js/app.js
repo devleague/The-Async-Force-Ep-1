@@ -60,46 +60,66 @@ personSpecies.send();
 
 
 
-
-
+// instantiates XML
 let lists = new XMLHttpRequest();
-lists.addEventListener('load', function listFunc() {
-  let data = JSON.parse(this.responseText);
-  let result = data.results;
-  console.log(data)
-  let movieTitle = result.map(function (item, index) {
-    return item.title
-  })
-
-
-  let filmPlanet = result.map(function (item, index) {
-    return item.planets
-  })
-
-  let planets = filmPlanet.map(function (items, index) {
- let myPlanets = new XMLHttpRequest();
-    myPlanets.addEventListener('load', function grabPlanet() {
-      let data = JSON.parse(this.responseText);
-      console.log(data.name);
-    })
-    myPlanets.open('GET', filmPlanet[index]);
-    myPlanets.send();
-  })
-
-
-  for (let i = 0; i < movieTitle.length; i++) {
-
-
-    let header = document.createElement('h1');
-    let eachPlanet = document.createElement('li');
-    eachPlanet.innerHTML = filmPlanet[i];
-    header.innerHTML = movieTitle[i];
-    filmList.appendChild(header);
-    header.appendChild(eachPlanet)
-
-
-  };
-
-})
+// adds an event when page is loaded.
+lists.addEventListener('load', listFun);
+// Grabs data from seletected website
 lists.open('GET', "https://swapi.co/api/films/");
+//invokes the request
 lists.send();
+
+
+//function that is used with event listner 
+function listFun(){
+  //parse xml into json file
+  let data = JSON.parse(this.responseText);
+  //grabs each element from results array.
+  let filmData = data.results;
+  
+  
+  //console.log(filmData);
+
+  filmData.forEach(function(items){
+    let filmTitle = items.title;
+    let filmLi = document.createElement('div');
+    // create div for title and planets
+    document.getElementById('filmList').appendChild(filmLi);
+    let filmTileH2 = document.createElement('h2');
+    // create h2 and append it to the div.
+    filmLi.appendChild(filmTileH2);
+    filmTileH2.innerHTML = filmTitle;
+    let plantH3 = document.createElement('h3');
+    plantH3.innerHTML = 'Planets';
+    filmLi.appendChild(plantH3);
+    let filmPlanets = items.planets;
+
+    filmPlanets.forEach(function(items){
+      //second forEach nested inside first. Singles out each planet
+      // in array into single string
+      let reqPlanets = new XMLHttpRequest();
+
+      reqPlanets.addEventListener('load', planetFunc);
+      //GETS each of the singled out links
+      reqPlanets.open('GET',items);
+      reqPlanets.send();
+      
+      function planetFunc(){
+        let data = JSON.parse(this.responseText);
+        let planetName = data.name;
+        
+        let planetLi = document.createElement('li');
+        filmLi.appendChild(planetLi);
+        let planetNameH4 = document.createElement('h4');
+        planetLi.appendChild(planetNameH4);
+        planetNameH4.innerHTML = planetName;
+      }
+    })
+ 
+ })
+
+
+
+
+
+}
